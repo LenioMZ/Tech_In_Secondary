@@ -8,7 +8,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 
 // ─── Design Tokens ───────────────────────────────────────────
 const T = {
@@ -107,34 +106,32 @@ function JakerBot({ lang }) {
         ? "مرحباً! أنا Jaker، مساعدك الذكي 🎧 اختر سؤالك:"
         : "Hi! I'm Jaker, your smart assistant 🎧 Pick a question:" }
   ]);
-  const [showHuman, setShowHuman] = useState(false);
-  const bottomRef = useRef(null);
+   const bottomRef = useRef(null);
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   useEffect(() => {
+     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+   }, [messages]);
 
-  function handleOption(opt) {
-    setMessages(prev => [
-      ...prev,
-      { from: "user", text: opt.label },
-      { from: "bot",  text: opt.answer },
-    ]);
-  }
+   function handleOption(opt) {
+     setMessages(prev => [
+       ...prev,
+       { from: "user", text: opt.label },
+       { from: "bot",  text: opt.answer },
+     ]);
+   }
 
-  function requestHuman() {
-    setShowHuman(true);
-    setMessages(prev => [
-      ...prev,
-      { from: "user", text: "أريد تحدث مع شخص حقيقي" },
-      {
-        from: "bot",
-        text: `يمكنك التواصل عبر:\n${HUMAN_NUMBERS.join("  |  ")}\nأو الدعم العام: ${FALLBACK_NUM}`,
-      },
-    ]);
-  }
+   function requestHuman() {
+     setMessages(prev => [
+       ...prev,
+       { from: "user", text: "أريد تحدث مع شخص حقيقي" },
+       {
+         from: "bot",
+         text: `يمكنك التواصل عبر:\n${HUMAN_NUMBERS.join("  |  ")}\nأو الدعم العام: ${FALLBACK_NUM}`,
+       },
+     ]);
+   }
 
-  return (
+   return (
     <>
       {/* Floating trigger */}
       <motion.button
@@ -320,7 +317,7 @@ function JakerBot({ lang }) {
 export default function HomePage() {
   const [lang, setLang]       = useState("ar");
   const [navSolid, setNavSolid] = useState(false);
-  const [discountCount, setDiscountCount] = useState(0); // from Supabase
+  const [discountCount] = useState(12); // placeholder discount count until Supabase integration
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef });
   const heroY  = useTransform(scrollYProgress, [0, 1], [0, -80]);
@@ -335,7 +332,6 @@ export default function HomePage() {
     // const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
     // const { data } = await supabase.from("discount_counter").select("count").single();
     // setDiscountCount(data?.count ?? 0);
-    setDiscountCount(12); // placeholder
   }, []);
 
   useEffect(() => {
@@ -467,8 +463,7 @@ export default function HomePage() {
                        radial-gradient(ellipse 40% 40% at 20% 20%, rgba(48,213,200,0.06) 0%, transparent 60%)`,
         }} />
 
-        <motion.div style={{ y: heroY, opacity: heroOp }} style={{
-          display: "flex", flexDirection: "column",
+        <motion.div style={{ y: heroY, opacity: heroOp, display: "flex", flexDirection: "column",
           alignItems: "center", textAlign: "center",
           gap: 20, maxWidth: 700, padding: "0 24px",
           zIndex: 2,
